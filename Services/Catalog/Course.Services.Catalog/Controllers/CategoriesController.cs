@@ -1,6 +1,7 @@
 ﻿using Course.Services.Catalog.DTOs.CategoryDTOs;
 using Course.Services.Catalog.Services.Abstractions;
 using Course.Shared.CustomBaseController;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
