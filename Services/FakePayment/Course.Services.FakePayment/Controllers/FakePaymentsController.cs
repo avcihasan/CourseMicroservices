@@ -8,7 +8,7 @@ namespace Course.Services.FakePayment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FakePaymnetsController : CustomBaseController
+    public class FakePaymentsController : CustomBaseController
     {
         [HttpPost]
         public IActionResult Payment()

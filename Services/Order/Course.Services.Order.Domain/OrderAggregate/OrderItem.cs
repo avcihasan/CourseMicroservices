@@ -13,6 +13,10 @@ namespace Course.Services.Order.Domain.OrderAggregate
         public string CourseName { get; private set; }
         public string PictureUrl { get; private set; }
         public Decimal Price { get; private set; }
+        public OrderItem()
+        {
+            
+        }
         public OrderItem(string courseId, string courseName, string pictureUrl, decimal price)
         {
             CourseId = courseId;

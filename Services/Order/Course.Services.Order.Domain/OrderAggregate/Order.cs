@@ -18,6 +18,10 @@ namespace Course.Services.Order.Domain.OrderAggregate
         private readonly List<OrderItem> _orderItems;
 
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
+        public Order()
+        {
+            
+        }
         public Order(string buyerId, Address address)
         {
             _orderItems = new List<OrderItem>();
