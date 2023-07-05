@@ -25,7 +25,7 @@ namespace Course.IdentityServer.Services.Concretes
                 ApplicationUser user = await _userManager.FindByIdAsync(userClaim.Value);
                 if (user != null)
                 {
-                    return ResponseDto<UserDto>.Success(new UserDto(){Email=user.Email, PhoneNumber = user.PhoneNumber,UserName=user.UserName },HttpStatusCode.OK);
+                    return ResponseDto<UserDto>.Success(new UserDto(){Id=user.Id,Email=user.Email, PhoneNumber = user.PhoneNumber,UserName=user.UserName },HttpStatusCode.OK);
                 }
             }
             return ResponseDto<UserDto>.Fail(string.Empty,HttpStatusCode.BadRequest);
