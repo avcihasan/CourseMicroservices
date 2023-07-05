@@ -30,7 +30,13 @@ namespace Course.Web.Controllers
                 result.Errors.ForEach(x =>ModelState.AddModelError(string.Empty, x));
                 return View();
             }
-            return RedirectToAction(nameof(Index),"Home");
+            return RedirectToAction(nameof(HomeController.Index),"Home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _identityService.LogoutAsync();
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

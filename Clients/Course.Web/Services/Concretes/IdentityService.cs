@@ -65,6 +65,12 @@ namespace Course.Web.Services.Concretes
             return token;
         }
 
+        public async Task LogoutAsync()
+        {
+            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await RevokeRefreshTokenAsync();
+        }
+
         public async Task RevokeRefreshTokenAsync()
         {
             var disco = await GetDiscoveryDocument();
