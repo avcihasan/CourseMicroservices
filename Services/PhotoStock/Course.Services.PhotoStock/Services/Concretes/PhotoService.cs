@@ -28,7 +28,7 @@ namespace Course.Services.PhotoStock.Services.Concretes
             using var stream = new FileStream(path, FileMode.Create);
             await photo.CopyToAsync(stream, cancellationToken);
 
-            var returnPath = $"photos/{photo.FileName}";
+            var returnPath = photo.FileName;
 
             return ResponseDto<PhotoDto>.Success(new PhotoDto() { Url = returnPath }, HttpStatusCode.OK);
 

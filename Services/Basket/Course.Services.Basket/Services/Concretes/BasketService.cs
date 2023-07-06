@@ -35,6 +35,8 @@ namespace Course.Services.Basket.Services.Concretes
 
         public async Task<ResponseDto<bool>> SaveOrUpdateBasketAsync(BasketDto basket)
         {
+            basket.UserId = _sharedIdentityService.UserId;
+
             bool result = await _redisService.GetDb().StringSetAsync(basket.UserId, JsonSerializer.Serialize(basket));
 
             return result ? ResponseDto<bool>.Success(HttpStatusCode.NoContent) : ResponseDto<bool>.Fail("Basket could not save or update", HttpStatusCode.InternalServerError);

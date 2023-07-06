@@ -1,4 +1,5 @@
 ﻿using Course.Shared.DTOs;
+using Course.Web.Helpers;
 using Course.Web.Models;
 using Course.Web.Services.Abstractions;
 using IdentityModel.Client;
@@ -31,7 +32,7 @@ namespace Course.Web.Services.Concretes
 
         public async Task<TokenResponse> GetAccessTokenByRefreshTokenAsync()
         {
-            var disco = await GetDiscoveryDocument();
+            var disco = await HelperMethods.GetDiscoveryDocumentAsync(_httpClient,_serviceApiSettings);
             var refreshToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
             RefreshTokenRequest refreshTokenRequest = new()
@@ -73,7 +74,7 @@ namespace Course.Web.Services.Concretes
 
         public async Task RevokeRefreshTokenAsync()
         {
-            var disco = await GetDiscoveryDocument();
+            var disco = await HelperMethods.GetDiscoveryDocumentAsync(_httpClient, _serviceApiSettings);
             var refreshToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
             TokenRevocationRequest tokenRevocationRequest = new()
@@ -90,7 +91,7 @@ namespace Course.Web.Services.Concretes
 
         public async Task<ResponseDto<bool>> SignInasync(SignInVM signIn)
         {
-            var disco = await GetDiscoveryDocument();
+            var disco = await HelperMethods.GetDiscoveryDocumentAsync(_httpClient, _serviceApiSettings);
 
             var passwordTokenRequest = new PasswordTokenRequest
             {
@@ -141,18 +142,7 @@ namespace Course.Web.Services.Concretes
         }
 
 
-        private async Task<DiscoveryDocumentResponse> GetDiscoveryDocument()
-        {
-            var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
-            {
-                Address = _serviceApiSettings.IdentityBaseUri,
-                Policy = new DiscoveryPolicy() { RequireHttps = false }
-            });
-
-            if (disco.IsError)
-                throw disco.Exception;
-            return disco;
-        }
+       
 
     }
 }

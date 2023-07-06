@@ -18,7 +18,7 @@ namespace Course.Shared.DTOs
         public static ResponseDto<T> Success(T data, HttpStatusCode statusCode)
             => new ResponseDto<T>() { Data = data, StatusCode = (int)statusCode,IsSuccessful=true };
         public static ResponseDto<T> Success(HttpStatusCode statusCode)
-            => new ResponseDto<T>() { Data = default(T), StatusCode = (int)statusCode, IsSuccessful = true };
+            => new ResponseDto<T>() { Data = default, StatusCode = (int)statusCode, IsSuccessful = true };
         public static ResponseDto<T> Fail(List<string> errors,HttpStatusCode statusCode)
             => new ResponseDto<T>() { Errors=errors, StatusCode = (int)statusCode, IsSuccessful = false };
         public static ResponseDto<T> Fail(string error, HttpStatusCode statusCode)

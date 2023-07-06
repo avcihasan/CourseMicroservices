@@ -20,7 +20,7 @@ namespace Course.Services.PhotoStock.Controllers
         public async Task<IActionResult> SavePhoto(IFormFile photo, CancellationToken cancellationToken)
             => CreateActionResult(await _photoService.SavePhotoAsync(photo,cancellationToken));
         [HttpDelete]
-        public IActionResult DeletePhoto(string photoUrl)
+        public IActionResult DeletePhoto([FromRoute]string photoUrl)
             => CreateActionResult(_photoService.DeletePhoto(photoUrl));
     }
 }
