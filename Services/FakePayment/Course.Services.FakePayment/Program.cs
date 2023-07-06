@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.Authority = builder.Configuration["IdentityServerUrl"];
-    options.Audience = "resource_basket";
+    options.Audience = "resource_payment";
     options.RequireHttpsMetadata = false;
 });
 var app = builder.Build();

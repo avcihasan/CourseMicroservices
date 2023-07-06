@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+@model CheckoutInfoVM
+<form asp-controller="Orders" asp-action="Checkout" method="post">
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Adres bilgileri</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Address.Province"></label>
+                        <input asp-for="Address.Province" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Address.District"></label>
+                        <input asp-for="Address.District" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Address.Street"></label>
+                        <input asp-for="Address.Street" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Address.Line"></label>
+                        <input asp-for="Address.Line" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Address.ZipCode"></label>
+                        <input asp-for="Address.ZipCode" class="form-control">
+                    </div>
+
+                    <h5 class="card-title">Ödeme bilgileri</h5>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="CardName"></label>
+                        <input asp-for="CardName" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="CardNumber"></label>
+                        <input asp-for="CardNumber" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Expiration"></label>
+                        <input asp-for="Expiration" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="CVV"></label>
+                        <input asp-for="CVV" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ödeme özet</h5>
+                    <table class="table table-striped">
+                        @foreach (var item in ViewBag.basket.BasketItems as List<BasketItemVM>)
+                        {
+                            <tr>
+                                <td>@item.CourseName</td>
+                                <td>@item.CurrentPrice</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td>@(ViewBag.basket.HasDiscount ? "indirimli toplam fiyat" : "toplam fiyat")</td>
+                            <td>@ViewBag.basket.TotalPrice TL</td>
+                        </tr>
+                    </table>
+
+                    <button type="submit" class="btn btn-success">Ödemeyi tamamla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

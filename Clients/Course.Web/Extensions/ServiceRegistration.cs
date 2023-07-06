@@ -40,6 +40,15 @@ namespace Course.Web.Extensions
                 opts.BaseAddress = new Uri(string.Concat(serviceApiSettings.GatewayBaseUri, serviceApiSettings.Basket.Path));
             }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
+            service.AddHttpClient<IOrderService, OrderService>(opts =>
+            {
+                opts.BaseAddress = new Uri(string.Concat(serviceApiSettings.GatewayBaseUri, serviceApiSettings.Order.Path));
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+            service.AddHttpClient<IPaymentService, PaymentService>(opts =>
+            {
+                opts.BaseAddress = new Uri(string.Concat(serviceApiSettings.GatewayBaseUri, serviceApiSettings.Payment.Path));
+            }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
             service.AddHttpClient<IDiscountService, DiscountService>(opts =>
             {

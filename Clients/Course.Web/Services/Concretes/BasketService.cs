@@ -67,11 +67,7 @@ namespace Course.Web.Services.Concretes
         }
 
         public async Task<bool> DeleteBasketAsync()
-        {
-            HttpResponseMessage responseMessage = await _httpClient.DeleteAsync("baskets");
-            return (await responseMessage.Content.ReadFromJsonAsync<ResponseDto<bool>>()).Data;
-
-        }
+            => (await _httpClient.DeleteAsync("baskets")).IsSuccessStatusCode;
 
         public async Task<BasketVM> GetBasketAsync()
         {

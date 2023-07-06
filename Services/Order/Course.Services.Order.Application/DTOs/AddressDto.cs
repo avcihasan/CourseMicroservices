@@ -17,5 +17,8 @@ namespace Course.Services.Order.Application.DTOs
         public string ZipCode { get;  set; }
 
         public string Line { get;  set; }
+
+
+      
     }
 }
