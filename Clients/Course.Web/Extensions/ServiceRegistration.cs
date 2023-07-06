@@ -5,14 +5,23 @@ using Course.Web.Helpers;
 using Course.Web.Models;
 using Course.Web.Services.Abstractions;
 using Course.Web.Services.Concretes;
+using Course.Web.Validators.CourseValidators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace Course.Web.Extension
+namespace Course.Web.Extensions
 {
     public static class ServiceRegistration
     {
         public static void AddServices(this IServiceCollection service, IConfiguration configuration)
         {
+
+            service.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+            service.AddValidatorsFromAssemblyContaining(typeof(CreateCourseVMValidator));
+
+
+
             ServiceApiSettings serviceApiSettings = configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
 
             service.AddHttpClient<ICatalogService, CatalogService>(opts =>
@@ -39,7 +48,7 @@ namespace Course.Web.Extension
             service.AddHttpClient<IClientCredentialTokenService, ClientCredentialTokenService>();
             service.AddScoped<ResourceOwnerPasswordTokenHandler>();
             service.AddScoped<ClientCredentialTokenHandler>();
-            service.AddScoped<ISharedIdentityService,SharedIdentityService>();
+            service.AddScoped<ISharedIdentityService, SharedIdentityService>();
             service.AddSingleton<PhotoHelper>();
             service.AddAccessTokenManagement();
 

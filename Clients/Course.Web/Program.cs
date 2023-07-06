@@ -1,4 +1,4 @@
-using Course.Web.Extension;
+using Course.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

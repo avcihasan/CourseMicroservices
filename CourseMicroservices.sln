@@ -47,11 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.Services.Order.Infra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{D76E09EE-833C-4E9F-83B8-961E9815A09E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course.Gateway", "Gateways\Course.Gateway\Course.Gateway.csproj", "{D4377634-7575-40FB-A488-6D3FE0F754EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.Gateway", "Gateways\Course.Gateway\Course.Gateway.csproj", "{D4377634-7575-40FB-A488-6D3FE0F754EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{A620F854-E6F6-4653-9AB3-DEA89DA33F0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Course.Web", "Clients\Course.Web\Course.Web.csproj", "{E08E3EAD-525B-4E83-9BAE-0445B687ADC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Course.Web", "Clients\Course.Web\Course.Web.csproj", "{E08E3EAD-525B-4E83-9BAE-0445B687ADC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
