@@ -30,6 +30,6 @@
         }
         public decimal TotalPrice => BasketItems.Sum(x => x.CurrentPrice);
 
-        public bool HasDiscount => !string.IsNullOrEmpty(DiscountCode);
+        public bool HasDiscount => !string.IsNullOrEmpty(DiscountCode) && DiscountRate.HasValue;
     }
 }

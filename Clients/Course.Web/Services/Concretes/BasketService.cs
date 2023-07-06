@@ -1,6 +1,7 @@
 ﻿using Course.Shared.DTOs;
 using Course.Web.Models.BasketModels;
 using Course.Web.Models.CatalogModels;
+using Course.Web.Models.DiscountModels;
 using Course.Web.Services.Abstractions;
 
 namespace Course.Web.Services.Concretes
@@ -9,11 +10,13 @@ namespace Course.Web.Services.Concretes
     {
         readonly HttpClient _httpClient;
         readonly ICatalogService _catalogService;
+        readonly IDiscountService _discountService;
 
-        public BasketService(HttpClient httpClient, ICatalogService catalogService)
+        public BasketService(HttpClient httpClient, ICatalogService catalogService, IDiscountService discountService)
         {
             _httpClient = httpClient;
             _catalogService = catalogService;
+            _discountService = discountService;
         }
 
         public async Task AddBasketItemToBasketAsync(string  courseId)
@@ -40,16 +43,27 @@ namespace Course.Web.Services.Concretes
         {
             await CancelDiscountAsync();
             BasketVM basket = await GetBasketAsync();
-            basket.DiscountCode = discountCode;
+            if (basket is null )
+                return false;
+
+            DiscountVM discount = await _discountService.GetDiscountAsync(discountCode);
+            if (discount is null)
+                return false;
+            
+            basket.DiscountCode = discount.Code;
+            basket.DiscountRate = discount.Rate;
+            await SaveOrUpdateAsync(basket);
             return true;
         }
 
         public async Task<bool> CancelDiscountAsync()
         {
             BasketVM basket = await GetBasketAsync();
-            if (basket is null)
-                basket.DiscountCode = string.Empty;
-            return true;
+            if (basket is null || basket.DiscountCode is null)
+                return false;
+            basket.DiscountCode = null;
+            basket.DiscountRate = null;
+            return await SaveOrUpdateAsync(basket);
         }
 
         public async Task<bool> DeleteBasketAsync()
