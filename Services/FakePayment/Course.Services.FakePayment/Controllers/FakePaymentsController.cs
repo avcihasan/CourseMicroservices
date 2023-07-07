@@ -1,4 +1,5 @@
 ﻿using Course.Services.FakePayment.DTOs;
+using Course.Services.FakePayment.Services.Abstractions;
 using Course.Shared.CustomBaseController;
 using Course.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -11,8 +12,18 @@ namespace Course.Services.FakePayment.Controllers
     [ApiController]
     public class FakePaymentsController : CustomBaseController
     {
+        readonly IRabbitMQService _rabbitMQService;
+
+        public FakePaymentsController(IRabbitMQService rabbitMQService)
+        {
+            _rabbitMQService = rabbitMQService;
+        }
+
         [HttpPost]
-        public IActionResult Payment([FromBody]PaymentInfoDto paymentInfoDto)
-            => CreateActionResult(ResponseDto<NoContentDto>.Success(HttpStatusCode.OK));
+        public async Task<IActionResult> Payment([FromBody]PaymentInfoDto paymentInfoDto)
+        {
+            await _rabbitMQService.SendMessageAsync(paymentInfoDto);
+            return CreateActionResult(ResponseDto<NoContentDto>.Success(HttpStatusCode.OK));
+        }
     }
 }

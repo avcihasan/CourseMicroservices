@@ -1,3 +1,6 @@
+using Course.Services.FakePayment.Services.Abstractions;
+using Course.Services.FakePayment.Services.Concretes;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -18,6 +21,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     options.Audience = "resource_payment";
     options.RequireHttpsMetadata = false;
 });
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+    });
+});
+
+builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

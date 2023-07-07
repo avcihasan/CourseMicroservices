@@ -1,4 +1,7 @@
-﻿using Course.Services.Order.Application.Mapping;
+﻿using Course.Services.Order.Application.Consumers;
+using Course.Services.Order.Application.Mapping;
+using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,9 +14,28 @@ namespace Course.Services.Order.Application
 {
     public static class ServiceRegistration
     {
-        public static void AddApplicationServices(this IServiceCollection services)
+        public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetAssembly(typeof(MapProfile)));
+            services.AddMassTransit(x =>
+            {
+
+                x.AddConsumer<CreateOrderMessageCommandConsumer>();
+                // Default Port : 5672
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(configuration["RabbitMQUrl"], "/", host =>
+                    {
+                        host.Username("guest");
+                        host.Password("guest");
+                    });
+                    cfg.ReceiveEndpoint("create-order-service", e =>
+                    {
+                        e.ConfigureConsumer<CreateOrderMessageCommandConsumer>(context);
+                    });
+                });
+            });
+
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Course.Web.Services.Concretes
             _httpClient = httpClient;
         }
 
-        public async Task<bool> RecievePayment(PaymentInfoVM payment)
-            =>(await _httpClient.PostAsJsonAsync<PaymentInfoVM>("fakepayments", payment)).IsSuccessStatusCode;
+        public async Task<bool> ReceivePayment(PaymentInfoVM payment)
+            => (await _httpClient.PostAsJsonAsync<PaymentInfoVM>("fakepayments", payment)).IsSuccessStatusCode;
     }
 }

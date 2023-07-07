@@ -25,14 +25,16 @@ namespace Course.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutInfoVM checkoutInfoVM)
         {
-            OrderCreatedVM response=  await _orderService.CreateOrderAsync(checkoutInfoVM);
+            //OrderCreatedVM response=  await _orderService.CreateOrderAsync(checkoutInfoVM);
+            OrderSuspendVM response = await _orderService.SuspendOrderAsync(checkoutInfoVM);
             if (!response.IsSuccessful)
             {
                 ViewBag.basket = await _basketService.GetBasketAsync();
                 ViewBag.error = response.Error;
                 return View();
             }
-            return RedirectToAction(nameof(SuccessfulCheckout), new { id = response.Id});
+            //return RedirectToAction(nameof(SuccessfulCheckout), new { id = response.Id});
+            return RedirectToAction(nameof(SuccessfulCheckout), new { id = -1});
         }
 
         public IActionResult SuccessfulCheckout(int id)
@@ -41,5 +43,8 @@ namespace Course.Web.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> CheckoutHistory()
+            => View(await _orderService.GetAllOrderAsync());
     }
 }

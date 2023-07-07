@@ -15,7 +15,7 @@ namespace Course.Web.Services.Abstractions
         /// </summary>
         /// <param name="checkoutInfoVM"></param>
         /// <returns></returns>
-        Task SuspendOrder(CheckoutInfoVM checkoutInfoVM);
+        Task<OrderSuspendVM> SuspendOrderAsync(CheckoutInfoVM checkoutInfoVM);
 
         Task<List<OrderVM>> GetAllOrderAsync(); 
 

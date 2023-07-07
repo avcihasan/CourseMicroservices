@@ -30,11 +30,11 @@ namespace Course.Web.Services.Concretes
                 CardName = checkoutInfoVM.CardName,
                 CardNumber = checkoutInfoVM.CardNumber,
                 CVV = checkoutInfoVM.CVV,
-                Expration = checkoutInfoVM.Expiration,
+                Expiration = checkoutInfoVM.Expiration,
                 TotalPrice = basket.TotalPrice
             };
 
-            bool paymentResponse = await _paymentService.RecievePayment(paymentInfoVM);
+            bool paymentResponse = await _paymentService.ReceivePayment(paymentInfoVM);
             if (!paymentResponse)
                 return new() { Error = "Ödeme Hatası", IsSuccessful = false };
 
@@ -51,7 +51,7 @@ namespace Course.Web.Services.Concretes
                 Price = x.CurrentPrice
             }));
 
-           HttpResponseMessage httpResponseMessage= await _httpClient.PostAsJsonAsync<CreateOrderVM>("orders", createOrderVM);
+            HttpResponseMessage httpResponseMessage = await _httpClient.PostAsJsonAsync<CreateOrderVM>("orders", createOrderVM);
             if (!httpResponseMessage.IsSuccessStatusCode)
                 return new() { Error = "Sipariş Oluşturma Hatası", IsSuccessful = false };
             await _basketService.DeleteBasketAsync();
@@ -61,9 +61,40 @@ namespace Course.Web.Services.Concretes
         public async Task<List<OrderVM>> GetAllOrderAsync()
            => (await _httpClient.GetFromJsonAsync<ResponseDto<List<OrderVM>>>("orders")).Data;
 
-        public Task SuspendOrder(CheckoutInfoVM checkoutInfoVM)
+        public async Task<OrderSuspendVM> SuspendOrderAsync(CheckoutInfoVM checkoutInfoVM)
         {
-            throw new NotImplementedException();
+
+            BasketVM basket = await _basketService.GetBasketAsync();
+            CreateOrderVM createOrderVM = new()
+            {
+                BuyerId = _sharedIdentityService.UserId,
+                Address = checkoutInfoVM.Address,
+            };
+
+            basket.BasketItems.ForEach(x => createOrderVM.OrderItems.Add(new()
+            {
+                CourseId = x.CourseId,
+                CourseName = x.CourseName,
+                PictureUrl = "",
+                Price = x.CurrentPrice
+            }));
+
+            PaymentInfoVM paymentInfoVM = new()
+            {
+                CardName = checkoutInfoVM.CardName,
+                CardNumber = checkoutInfoVM.CardNumber,
+                Expiration = checkoutInfoVM.Expiration,
+                CVV = checkoutInfoVM.CVV,
+                TotalPrice = basket.TotalPrice,
+                Order = createOrderVM
+            };
+
+            bool paymentResponse = await _paymentService.ReceivePayment(paymentInfoVM);
+            if (!paymentResponse)
+                return new() { Error = "Ödeme Hatası", IsSuccessful = false };
+
+            await _basketService.DeleteBasketAsync();
+            return new() { IsSuccessful = true };
         }
     }
 }

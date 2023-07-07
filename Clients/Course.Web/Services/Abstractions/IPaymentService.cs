@@ -4,6 +4,6 @@ namespace Course.Web.Services.Abstractions
 {
     public interface IPaymentService
     {
-        Task<bool> RecievePayment(PaymentInfoVM payment);
+        Task<bool> ReceivePayment(PaymentInfoVM payment);
     }
 }
