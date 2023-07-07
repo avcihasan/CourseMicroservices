@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Course.Services.Catalog.DTOs.CategoryDTOs;
 using Course.Services.Catalog.DTOs.CourseDTOs;
 using Course.Services.Catalog.Entities;
 using Course.Services.Catalog.Services.Abstractions;
 using Course.Services.Catalog.Settings;
 using Course.Shared.DTOs;
+using Course.Shared.Messages.Events;
+using MassTransit;
 using MongoDB.Driver;
-using System.Collections.Generic;
 using System.Net;
 
 namespace Course.Services.Catalog.Services.Concretes
@@ -16,13 +16,15 @@ namespace Course.Services.Catalog.Services.Concretes
         readonly IMongoCollection<Entities.Course> _courseCollection;
         readonly IMapper _mapper;
         readonly ICategoryService _categoryService;
-        public CourseService(IMapper mapper, IDatabaseSettings databaseSettings, ICategoryService categoryService)
+        readonly IPublishEndpoint _publishEndpoint;
+        public CourseService(IMapper mapper, IDatabaseSettings databaseSettings, ICategoryService categoryService, IPublishEndpoint publishEndpoint)
         {
             MongoClient client = new(databaseSettings.ConnectionString);
             IMongoDatabase database = client.GetDatabase(databaseSettings.DatabaseName);
             _courseCollection = database.GetCollection<Entities.Course>(databaseSettings.CourseCollectionName);
             _mapper = mapper;
             _categoryService = categoryService;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<ResponseDto<CourseDto>> CreateCourseAsync(CreateCourseDto course)
@@ -76,6 +78,9 @@ namespace Course.Services.Catalog.Services.Concretes
            ReplaceOneResult result=await _courseCollection.ReplaceOneAsync(x => x.Id == course.Id, _mapper.Map<Entities.Course>(course));
             if (result.ModifiedCount <= 0)
                 return ResponseDto<NoContentDto>.Fail("Course not found", HttpStatusCode.NotFound);
+
+            await _publishEndpoint.Publish<CourseNameChangedEvent>(new() { CourseId=course.Id,UpdatedName=course.Name});
+
             return ResponseDto<NoContentDto>.Success(HttpStatusCode.NoContent);
         }
     }

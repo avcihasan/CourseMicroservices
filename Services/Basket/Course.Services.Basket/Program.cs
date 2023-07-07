@@ -1,8 +1,10 @@
+using Course.Services.Basket.Consumers;
 using Course.Services.Basket.Services.Abstractions;
 using Course.Services.Basket.Services.Concretes;
 using Course.Services.Basket.Settings;
 using Course.Shared.Services.Abstractions;
 using Course.Shared.Services.Concretes;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -29,6 +31,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     options.RequireHttpsMetadata = false;
 });
 
+builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddMassTransit(x =>
+{
+
+    x.AddConsumer<CourseNameChangedEventConsumer>();
+    // Default Port : 5672
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQUrl"], "/", host =>
+        {
+            host.Username("guest");
+            host.Password("guest");
+        });
+        cfg.ReceiveEndpoint("course-name-changed-basket-service", e =>
+        {
+            e.ConfigureConsumer<CourseNameChangedEventConsumer>(context);
+        });
+    });
+});
+
+
 builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection("RedisSettings"));
 
 builder.Services.AddSingleton<IRedisService>(x =>
@@ -38,8 +62,7 @@ builder.Services.AddSingleton<IRedisService>(x =>
     redis.ConnectAsync().Wait();
     return redis;
 });
-builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
-builder.Services.AddScoped<IBasketService, BasketService>();
+
 
 
 
