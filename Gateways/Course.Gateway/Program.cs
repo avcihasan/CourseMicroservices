@@ -1,10 +1,11 @@
+using Course.Gateway.DelegateHandlers;
 using Microsoft.Extensions.Options;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOcelot();
-
+builder.Services.AddOcelot().AddDelegatingHandler<TokenExchangeDelegateHandler>();
+builder.Services.AddHttpClient<TokenExchangeDelegateHandler>();
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.json", true, true)
