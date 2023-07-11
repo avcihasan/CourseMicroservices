@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "course.services.basket": "StartDebugging",
+        "course.web": "StartDebugging",
+        "course.gateway": "StartDebugging",
+        "course.identityserver": "StartDebugging",
+        "course.services.catalog": "StartDebugging",
+        "course.services.discount": "StartDebugging",
+        "course.services.fakepayment": "StartDebugging",
+        "course.services.order.api": "StartDebugging",
+        "course.services.photostock": "StartDebugging"
+      }
+    }
+  }
+}

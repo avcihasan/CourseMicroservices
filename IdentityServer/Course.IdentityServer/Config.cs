@@ -75,9 +75,7 @@ namespace Course.IdentityServer
                     AllowedScopes=
                        {
                            "basket_fullpermission",
-                           "discount_fullpermission",
                            "order_fullpermission",
-                           "payment_fullpermission",
                            "gateway_fullpermission",
                            IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId,IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess, IdentityServerConstants.LocalApi.ScopeName,"roles" },
                     AccessTokenLifetime=1*60*60,

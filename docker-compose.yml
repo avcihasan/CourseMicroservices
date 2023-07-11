@@ -1,0 +1,95 @@
+version: "3.4"
+services:
+  catalogdb:
+    image: mongo
+  basketdb:
+    image: redis
+  discountdb:
+    image: postgres
+  identitydb:
+    image: mcr.microsoft.com/mssql/server
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+  rabbitmq:
+    image: rabbitmq:3.12.1-management
+
+  web:
+    image: web_image
+    build:
+      context: .
+      dockerfile: Clients/Course.Web/Dockerfile
+
+  gateway:
+    image: gateway_image
+    build:
+      context: .
+      dockerfile: Gateways/Course.Gateway/Dockerfile
+
+  identityserver:
+    image: identityserver_image
+    build:
+      context: .
+      dockerfile: IdentityServer/Course.IdentityServer/Dockerfile
+
+  basket:
+    image: basket_image
+    build:
+      context: .
+      dockerfile: Services/Basket/Course.Services.Basket/Dockerfile
+
+  catalog:
+    image: catalog_image
+    build:
+      context: .
+      dockerfile: Services/Catalog/Course.Services.Catalog/Dockerfile
+
+  discount:
+    image: discount_image
+    build:
+      context: .
+      dockerfile: Services/Discount/Course.Services.Discount/Dockerfile
+
+  fakepayment:
+    image: fakepayment_image
+    build:
+      context: .
+      dockerfile: Services/FakePayment/Course.Services.FakePayment/Dockerfile
+
+  order:
+    image: orderapi_image
+    build:
+      context: .
+      dockerfile: Services/Order/Course.Services.Order.API/Dockerfile
+
+  photostock:
+    image: photostock_image
+    build:
+      context: .
+      dockerfile: Services/PhotoStock/Course.Services.PhotoStock/Dockerfile
+
+volumes:
+  catalogdb_volume:
+  discount_volume:
+  identitydb_volume:
+  orderdb_volume:
+
+
+
+#version: '3.4'
+
+#services:
+#  course.services.basket:
+#    image: courseservicesbasket
+#    build:
+#      context: .
+#      dockerfile: Services/Basket/Course.Services.Basket/Dockerfile
+
+
+
+
+
+
+
+
+
+
