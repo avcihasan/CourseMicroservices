@@ -1,4 +1,5 @@
-version: "3.4"
+version: '3.4'
+
 services:
   catalogdb:
     image: mongo
@@ -7,84 +8,70 @@ services:
   discountdb:
     image: postgres
   identitydb:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-latest
   orderdb:
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-latest
   rabbitmq:
-    image: rabbitmq:3.12.1-management
+    image: rabbitmq:3.8.14-management
 
-  web:
-    image: web_image
-    build:
-      context: .
-      dockerfile: Clients/Course.Web/Dockerfile
-
-  gateway:
-    image: gateway_image
-    build:
-      context: .
-      dockerfile: Gateways/Course.Gateway/Dockerfile
-
-  identityserver:
-    image: identityserver_image
-    build:
-      context: .
-      dockerfile: IdentityServer/Course.IdentityServer/Dockerfile
-
-  basket:
-    image: basket_image
-    build:
-      context: .
-      dockerfile: Services/Basket/Course.Services.Basket/Dockerfile
-
-  catalog:
+  catalog.api:
     image: catalog_image
     build:
       context: .
       dockerfile: Services/Catalog/Course.Services.Catalog/Dockerfile
 
-  discount:
+  identityserver.api:
+    image: identityserver_image
+    build:
+      context: .
+      dockerfile: IdentityServer/Course.IdentityServer/Dockerfile
+  basket.api:
+    image: basket_image
+    build:
+      context: .
+      dockerfile: Services/Basket/Course.Services.Basket/Dockerfile
+
+  photostock.api:
+    image: photostock_image
+    build:
+      context: .
+      dockerfile: Services/PhotoStock/Course.Services.PhotoStock/Dockerfile
+
+  discount.api:
     image: discount_image
     build:
       context: .
       dockerfile: Services/Discount/Course.Services.Discount/Dockerfile
 
-  fakepayment:
+  fakepayment.api:
     image: fakepayment_image
     build:
       context: .
       dockerfile: Services/FakePayment/Course.Services.FakePayment/Dockerfile
 
-  order:
-    image: orderapi_image
+  order.api:
+    image: order_image
     build:
       context: .
       dockerfile: Services/Order/Course.Services.Order.API/Dockerfile
 
-  photostock:
-    image: photostock_image
+  gateway.api:
+    image: gateway_image
     build:
       context: .
-      dockerfile: Services/PhotoStock/Course.Services.PhotoStock/Dockerfile
+      dockerfile: Gateways/Course.Gateway/Dockerfile
+
+  mvc.web:
+    image: web_image
+    build:
+      context: .
+      dockerfile: Clients/Course.Web/Dockerfile
 
 volumes:
   catalogdb_volume:
   discount_volume:
   identitydb_volume:
   orderdb_volume:
-
-
-
-#version: '3.4'
-
-#services:
-#  course.services.basket:
-#    image: courseservicesbasket
-#    build:
-#      context: .
-#      dockerfile: Services/Basket/Course.Services.Basket/Dockerfile
-
-
 
 
 
